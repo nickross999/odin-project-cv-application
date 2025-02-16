@@ -1,4 +1,5 @@
 import { useState } from "react";
+import '../css/GeneralInformation.css'
 import pencilIcon from "../assets/pencil.png";
 import closeIcon from "../assets/close.png"
 
