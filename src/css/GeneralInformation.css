@@ -1,0 +1,27 @@
+.user-info-container {
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.input-container {
+    display: flex;
+}
+
+.input-label {
+    display: inherit;
+    flex-direction: column;
+}
+
+.toggle-input-visibility-button {
+    background: transparent;
+    border: none;
+}
+
+.icon {
+    max-width: 32px;
+}
+
+.hidden {
+    display: none;
+}
