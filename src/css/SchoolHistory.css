@@ -1,8 +1,12 @@
 .icon {
-    max-width: 32px;
+  max-width: 32px;
 }
 
-.add-history-button {
-    background: transparent;
-    border: none;
+.add-history-button, .delete-history-button {
+  background: transparent;
+  border: none;
+}
+
+.school-history {
+  border: 1px solid black;
 }

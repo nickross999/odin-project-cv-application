@@ -1,18 +1,13 @@
 import { useState } from "react";
 import "../css/SchoolHistory.css";
 import plusIcon from "../assets/plus.png";
+import closeIcon from "../assets/close.png";
 
 function SchoolHistory() {
-  const [showHistoryInput, setShowHistoryInput] = useState(false);
-  const historyList = [];
+  const [showSchoolHistoryInput, setSchoolHistoryInput] = useState(false);
+  const [schoolHistoryList, setSchoolHistoryList] = useState([]);
 
-  const handleSubmitClick = (e) => {
-    e.preventDefault();
-    console.log(e);
-    setShowHistoryInput(!showHistoryInput);
-  };
-
-  const schoolHistory = historyList.map((item) => {
+  const schoolHistory = schoolHistoryList.map((item) => {
     return (
       <div key={item.key}>
         <h2>School: </h2>
@@ -23,15 +18,45 @@ function SchoolHistory() {
         <span>{item.studyStart}</span>
         <h2>To: </h2>
         <span>{item.studyEnd}</span>
+        <button
+          className="delete-history-button"
+          onClick={() => {
+            handleDeletion(item.key);
+          }}
+        >
+          <img className="icon" src={closeIcon} />
+        </button>
       </div>
     );
   });
 
-  if (showHistoryInput) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSchoolHistoryList([
+      ...schoolHistoryList,
+      {
+        key: crypto.randomUUID(),
+        schoolName: e.target[0].value,
+        field: e.target[1].value,
+        studyStart: e.target[2].value,
+        studyEnd: e.target[3].value,
+      },
+    ]);
+    setSchoolHistoryInput(!showSchoolHistoryInput);
+  };
+
+  const handleDeletion = (itemKey) => {
+    setSchoolHistoryList(
+      schoolHistoryList.filter((item) => item.key !== itemKey)
+    );
+  };
+
+  if (showSchoolHistoryInput) {
     return (
-      <>
+      <div className="school-history">
+        <h1>School History: </h1>
         <div>{schoolHistory}</div>
-        <form className="school-input-form">
+        <form className="school-input-form" onSubmit={handleSubmit}>
           <label>School: </label>
           <input type="text" />
           <label>Area of Study: </label>
@@ -40,27 +65,33 @@ function SchoolHistory() {
           <input type="date" />
           <label>To: </label>
           <input type="date" />
-          <button type="submit" onClick={handleSubmitClick}>
-            Submit
-          </button>
+          <button type="submit">Submit</button>
         </form>
-      </>
+        <button
+          onClick={() => {
+            setSchoolHistoryInput(!showSchoolHistoryInput);
+          }}
+        >
+          Cancel
+        </button>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="school-history">
+      <h1>School History: </h1>
       <div>{schoolHistory}</div>
       <button className="add-history-button">
         <img
           className="icon"
           src={plusIcon}
           onClick={() => {
-            setShowHistoryInput(!showHistoryInput);
+            setSchoolHistoryInput(!showSchoolHistoryInput);
           }}
         />
       </button>
-    </>
+    </div>
   );
 }
 
