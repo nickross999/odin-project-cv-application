@@ -3,7 +3,7 @@ import "../css/SchoolHistory.css";
 import plusIcon from "../assets/plus.png";
 import closeIcon from "../assets/close.png";
 
-function SchoolHistory() {
+function SchoolHistory({ eventHandler }) {
   const [showSchoolHistoryInput, setSchoolHistoryInput] = useState(false);
   const [schoolHistoryList, setSchoolHistoryList] = useState([]);
 
@@ -43,6 +43,7 @@ function SchoolHistory() {
       },
     ]);
     setSchoolHistoryInput(!showSchoolHistoryInput);
+    eventHandler(e, 1);
   };
 
   const handleDeletion = (itemKey) => {
@@ -53,33 +54,34 @@ function SchoolHistory() {
 
   if (showSchoolHistoryInput) {
     return (
-      <div className="school-history">
+      <div className="school-history-container">
         <h1>School History: </h1>
         <div>{schoolHistory}</div>
         <form className="school-input-form" onSubmit={handleSubmit}>
-          <label>School: </label>
-          <input type="text" />
-          <label>Area of Study: </label>
-          <input type="text" />
-          <label>From: </label>
-          <input type="date" />
-          <label>To: </label>
-          <input type="date" />
+          <label htmlFor="input-school">School: </label>
+          <input id="input-school" type="text" />
+          <label htmlFor="input-field">Area of Study: </label>
+          <input id="input-field" type="text" />
+          <label htmlFor="input-date-start">From: </label>
+          <input id="input-date-start" type="date" />
+          <label htmlFor="input-date-end">To: </label>
+          <input id="input-date-end" type="date" />
           <button type="submit">Submit</button>
         </form>
         <button
+          className="cancel-add-button"
           onClick={() => {
             setSchoolHistoryInput(!showSchoolHistoryInput);
           }}
         >
-          Cancel
+          <img className="icon" src={closeIcon} />
         </button>
       </div>
     );
   }
 
   return (
-    <div className="school-history">
+    <div className="school-history-container">
       <h1>School History: </h1>
       <div>{schoolHistory}</div>
       <button className="add-history-button">

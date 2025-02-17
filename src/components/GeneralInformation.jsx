@@ -1,9 +1,9 @@
 import { useState } from "react";
-import '../css/GeneralInformation.css'
+import "../css/GeneralInformation.css";
 import pencilIcon from "../assets/pencil.png";
-import closeIcon from "../assets/close.png"
+import closeIcon from "../assets/close.png";
 
-function Section({ input }) {
+function Section({ input, eventHandler }) {
   const [inputState, setInputState] = useState({
     value: "",
     id: input.value,
@@ -19,45 +19,58 @@ function Section({ input }) {
 
   if (inputState.visible) {
     return (
-      <>
-        <form key={inputState.key}>
-          <label className="input-label" htmlFor={inputState.id}>{input.label}</label>
+      <div className="input-container" key={input.key}>
+        <form
+          key={inputState.key}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <div className="input-title-div">
+            <h1>{input.label}</h1>
+            <button
+              className="toggle-input-visibility-button"
+              onClick={toggleInputVisibility}
+            >
+              <img src={closeIcon} className="icon" />
+            </button>
+          </div>
+          <label className="input-label hidden" htmlFor={inputState.id}>
+            {input.label}
+          </label>
           <input
             value={inputState.value}
             type={inputState.type}
             id={inputState.id}
             onChange={(e) => {
               setInputState({ ...inputState, value: e.target.value });
+              eventHandler(e, 0);
             }}
           />
         </form>
-        <button
-          className="toggle-input-visibility-button"
-          onClick={toggleInputVisibility}
-        >
-          <img src={closeIcon} className="icon" />
-        </button>
-      </>
+      </div>
     );
   } else {
     return (
-      <>
+      <div className="input-container" key={input.key}>
         <div key={inputState.key}>
-          <h1>{inputState.label}</h1>
-          <span>{inputState.value}</span>
+          <div className="input-title-div">
+            <h1>{inputState.label}</h1>
+            <button
+              className="toggle-input-visibility-button"
+              onClick={toggleInputVisibility}
+            >
+              <img className="icon" src={pencilIcon} />
+            </button>
+          </div>
+          <span className="input-span">{inputState.value}</span>
         </div>
-        <button
-          className="toggle-input-visibility-button"
-          onClick={toggleInputVisibility}
-        >
-          <img className="icon" src={pencilIcon} />
-        </button>
-      </>
+      </div>
     );
   }
 }
 
-function GeneralInformation() {
+function GeneralInformation( {eventHandler} ) {
   const inputs = [
     {
       id: "first-name",
@@ -89,9 +102,7 @@ function GeneralInformation() {
     <div className="user-info-container">
       {inputs.map((input) => {
         return (
-          <div className="input-container" key={input.key}>
-            <Section input={input} />
-          </div>
+          <Section input={input} eventHandler={eventHandler} key={input.key} />
         );
       })}
     </div>

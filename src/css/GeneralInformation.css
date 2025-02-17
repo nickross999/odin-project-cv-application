@@ -1,5 +1,4 @@
 .user-info-container {
-  border: 1px solid black;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
@@ -8,9 +7,19 @@
   display: flex;
 }
 
+
 .input-label {
   display: inherit;
   flex-direction: column;
+}
+
+.input-span {
+  display: inline-block;
+  height: 22px;
+}
+
+.input-title-div {
+  display: flex;
 }
 
 .toggle-input-visibility-button {

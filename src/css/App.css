@@ -1,0 +1,30 @@
+html, body, #root, .app-container {
+    margin: auto;
+    height: 100%;
+}
+
+.app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-section {
+    max-width: 500px;
+    min-width: 300px;
+    margin: 10px;
+    box-shadow: 1px 1px 1px black;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.tabs {
+    margin-top: -40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: none;
+  }  

@@ -2,11 +2,11 @@
   max-width: 32px;
 }
 
-.add-history-button, .delete-history-button {
+.add-history-button, .delete-history-button, .cancel-add-button {
   background: transparent;
   border: none;
 }
 
-.school-history {
-  border: 1px solid black;
+.hidden {
+  display: none;
 }
