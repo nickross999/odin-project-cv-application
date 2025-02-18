@@ -1,12 +1,24 @@
-.icon {
-  max-width: 32px;
-}
-
-.add-history-button, .delete-history-button, .cancel-add-button {
+.add-school-history-button,
+.delete-school-history-button,
+.cancel-school-add-button,
+.edit-school-history-button,
+.cancel-school-edit-button {
   background: transparent;
   border: none;
 }
 
-.hidden {
-  display: none;
+.school-history-list {
+  border: 1px solid black;
+  height: 100px;
+  overflow: scroll;
+  padding: 5px;
+}
+
+.school-history-item {
+  display: flex;
+  border-bottom: 1px dashed black;
+}
+
+.school-history-item:last-of-type {
+  border-bottom: none;
 }

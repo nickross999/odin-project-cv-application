@@ -1,14 +1,24 @@
-.icon {
-  max-width: 32px;
-}
-
 .add-work-history-button,
-.cancel-add-button,
-.delete-history-button {
+.delete-work-history-button,
+.cancel-add-history-button,
+.edit-work-history-button,
+.cancel-work-edit-button {
   background: transparent;
   border: none;
 }
 
-.hidden {
-    display: none;
+.work-history-list {
+  border: 1px solid black;
+  height: 100px;
+  overflow: scroll;
+  padding: 5px;
+}
+
+.work-history-item {
+  display: flex;
+  border-bottom: 1px dashed black;
+}
+
+.work-history-item:last-of-type {
+  border-bottom: none;
 }

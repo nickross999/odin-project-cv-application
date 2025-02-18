@@ -9,8 +9,8 @@ function App() {
   const [selectedTabState, setSelectedTabState] = useState(0);
   const [userInfoState, setUserInfoState] = useState({
     person: { firstName: "", lastName: "", age: null, phoneNumber: "" },
-    schoolHistory: [],
     workHistory: [],
+    schoolHistory: [],
   });
 
   const handleTabClick = (tabID) => {
@@ -54,21 +54,6 @@ function App() {
         });
       }
     } else if (index === 1) {
-      //SchoolHistory
-      setUserInfoState({
-        ...userInfoState,
-        schoolHistory: [
-          ...userInfoState.schoolHistory,
-          {
-            key: crypto.randomUUID(),
-            schoolName: e.target[0].value,
-            field: e.target[1].value,
-            studyStart: e.target[2].value,
-            studyEnd: e.target[3].value,
-          },
-        ],
-      });
-    } else if (index === 2) {
       //WorkHistory
       setUserInfoState({
         ...userInfoState,
@@ -84,19 +69,26 @@ function App() {
           },
         ],
       });
+    } else if (index === 2) {
+      //SchoolHistory
+      setUserInfoState({
+        ...userInfoState,
+        schoolHistory: [
+          ...userInfoState.schoolHistory,
+          {
+            key: crypto.randomUUID(),
+            schoolName: e.target[0].value,
+            field: e.target[1].value,
+            studyStart: e.target[2].value,
+            studyEnd: e.target[3].value,
+          },
+        ],
+      });
     }
   };
 
   const handleDelete = (itemKey, index) => {
     if (index === 1) {
-      //SchoolHistory
-      setUserInfoState({
-        ...userInfoState,
-        schoolHistory: userInfoState.schoolHistory.filter(
-          (item) => item.key !== itemKey
-        ),
-      });
-    } else if (index === 2) {
       //WorkHistory
       setUserInfoState({
         ...userInfoState,
@@ -104,9 +96,56 @@ function App() {
           (item) => item.key !== itemKey
         ),
       });
+    } else if (index === 2) {
+      //SchoolHistory
+      setUserInfoState({
+        ...userInfoState,
+        schoolHistory: userInfoState.schoolHistory.filter(
+          (item) => item.key !== itemKey
+        ),
+      });
     }
-    console.log("deleted");
-    console.log(userInfoState);
+  };
+
+  const handleEdit = (e, itemKey, index) => {
+    if (index === 1) {
+      setUserInfoState({
+        person: { ...userInfoState.person },
+        workHistory: userInfoState.workHistory.map((item) => {
+          if (item.key === itemKey) {
+            return {
+              key: itemKey,
+              company: e.target[0].value,
+              position: e.target[1].value,
+              workStart: e.target[2].value,
+              workEnd: e.target[3].value,
+              responsibilities: e.target[4].value,
+            };
+          } else {
+            return item;
+          }
+        }),
+        schoolHistory: [...userInfoState.schoolHistory],
+      });
+    } else if (index === 2) {
+      setUserInfoState({
+        person: { ...userInfoState.person },
+        workHistory: [...userInfoState.workHistory],
+        schoolHistory: userInfoState.schoolHistory.map((item) => {
+          if (item.key === itemKey) {
+            return {
+              key: itemKey,
+              schoolName: e.target[0].value,
+              field: e.target[1].value,
+              studyStart: e.target[2].value,
+              studyEnd: e.target[3].value,
+            };
+          } else {
+            return item;
+          }
+        }),
+      });
+    }
   };
 
   return (
@@ -114,7 +153,11 @@ function App() {
       <section className="input-section">
         <div className="tabs">
           <button
-            className="general-button"
+            className={
+              selectedTabState === 0
+                ? "general-button selected"
+                : "general-button"
+            }
             onClick={() => {
               handleTabClick(0);
             }}
@@ -122,20 +165,26 @@ function App() {
             General
           </button>
           <button
-            className="school-button"
-            onClick={() => {
-              handleTabClick(1);
-            }}
-          >
-            School History
-          </button>
-          <button
-            className="work-button"
+            className={
+              selectedTabState === 2 ? "work-button selected" : "work-button"
+            }
             onClick={() => {
               handleTabClick(2);
             }}
           >
             Work History
+          </button>
+          <button
+            className={
+              selectedTabState === 1
+                ? "school-button selected"
+                : "school-button"
+            }
+            onClick={() => {
+              handleTabClick(1);
+            }}
+          >
+            School History
           </button>
         </div>
         <div
@@ -149,6 +198,16 @@ function App() {
           />
         </div>
         <div
+          className={selectedTabState === 2 ? "work-info" : "work-info hidden"}
+        >
+          <WorkHistory
+            eventHandler={handleEvent}
+            deletionHandler={handleDelete}
+            editHandler={handleEdit}
+            workHistory={userInfoState.workHistory}
+          />
+        </div>
+        <div
           className={
             selectedTabState === 1 ? "school-info" : "school-info hidden"
           }
@@ -156,16 +215,8 @@ function App() {
           <SchoolHistory
             eventHandler={handleEvent}
             deletionHandler={handleDelete}
+            editHandler={handleEdit}
             schoolHistory={userInfoState.schoolHistory}
-          />
-        </div>
-        <div
-          className={selectedTabState === 2 ? "work-info" : "work-info hidden"}
-        >
-          <WorkHistory
-            eventHandler={handleEvent}
-            deletionHandler={handleDelete}
-            workHistory={userInfoState.workHistory}
           />
         </div>
       </section>
