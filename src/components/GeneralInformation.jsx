@@ -3,74 +3,14 @@ import "../css/GeneralInformation.css";
 import pencilIcon from "../assets/pencil.png";
 import closeIcon from "../assets/close.png";
 
-function Section({ input, eventHandler }) {
-  const [inputState, setInputState] = useState({
-    value: "",
-    id: input.value,
-    label: input.label,
-    type: input.type,
-    key: crypto.randomUUID(),
-    visible: false,
-  });
+function GeneralInformation({ eventHandler, person }) {
+  const [visibilityState, setVisibilityState] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
-  const toggleInputVisibility = () => {
-    setInputState({ ...inputState, visible: !inputState.visible });
-  };
-
-  if (inputState.visible) {
-    return (
-      <div className="input-container" key={input.key}>
-        <form
-          key={inputState.key}
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <div className="input-title-div">
-            <h1>{input.label}</h1>
-            <button
-              className="toggle-input-visibility-button"
-              onClick={toggleInputVisibility}
-            >
-              <img src={closeIcon} className="icon" />
-            </button>
-          </div>
-          <label className="input-label hidden" htmlFor={inputState.id}>
-            {input.label}
-          </label>
-          <input
-            value={inputState.value}
-            type={inputState.type}
-            id={inputState.id}
-            onChange={(e) => {
-              setInputState({ ...inputState, value: e.target.value });
-              eventHandler(e, 0);
-            }}
-          />
-        </form>
-      </div>
-    );
-  } else {
-    return (
-      <div className="input-container" key={input.key}>
-        <div key={inputState.key}>
-          <div className="input-title-div">
-            <h1>{inputState.label}</h1>
-            <button
-              className="toggle-input-visibility-button"
-              onClick={toggleInputVisibility}
-            >
-              <img className="icon" src={pencilIcon} />
-            </button>
-          </div>
-          <span className="input-span">{inputState.value}</span>
-        </div>
-      </div>
-    );
-  }
-}
-
-function GeneralInformation( {eventHandler} ) {
   const inputs = [
     {
       id: "first-name",
@@ -98,15 +38,59 @@ function GeneralInformation( {eventHandler} ) {
     },
   ];
 
-  return (
-    <div className="user-info-container">
-      {inputs.map((input) => {
-        return (
-          <Section input={input} eventHandler={eventHandler} key={input.key} />
-        );
-      })}
-    </div>
-  );
+  const toggleInputVisibility = (e, index) => {
+    setVisibilityState([
+      ...visibilityState.slice(0, index),
+      !visibilityState[index],
+      ...visibilityState.slice(index + 1),
+    ]);
+  };
+
+  const inputElements = inputs.map((input, index) => {
+    if (visibilityState[index]) {
+      return (
+        <div className="input-container" key={input.key}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              toggleInputVisibility(e, index);
+              eventHandler(e, 0);
+            }}
+          >
+            <div className="input-title-div">
+              <h1>{input.label}</h1>
+              <button type="submit" className="toggle-input-visibility-button">
+                <img src={closeIcon} className="icon" />
+              </button>
+            </div>
+            <label className="input-label hidden" htmlFor={input.id}>
+              {input.label}
+            </label>
+            <input type={input.type} id={input.id} />
+          </form>
+        </div>
+      );
+    } else {
+      return (
+        <div className="input-container" key={input.key}>
+          <div className="input-title-div">
+            <h1>{input.label}</h1>
+            <button
+              className="toggle-input-visibility-button"
+              onClick={(e) => {
+                toggleInputVisibility(e, index);
+              }}
+            >
+              <img className="icon" src={pencilIcon} />
+            </button>
+          </div>
+          <span className="input-span">{Object.values(person)[index]}</span>
+        </div>
+      );
+    }
+  });
+
+  return <div className="user-info-container">{inputElements}</div>;
 }
 
 export default GeneralInformation;

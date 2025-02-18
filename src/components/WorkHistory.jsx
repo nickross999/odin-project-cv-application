@@ -3,11 +3,10 @@ import "../css/WorkHistory.css";
 import plusIcon from "../assets/plus.png";
 import closeIcon from "../assets/close.png";
 
-function WorkHistory({ eventHandler }) {
+function WorkHistory({ eventHandler, deletionHandler, workHistory }) {
   const [showWorkHistoryInput, setShowWorkHistoryInput] = useState(false);
-  const [workHistoryList, setWorkHistoryList] = useState([]);
 
-  const workHistory = workHistoryList.map((item) => {
+  const workHistoryElements = workHistory.map((item) => {
     return (
       <div key={item.key}>
         <h2>Company:</h2>
@@ -19,11 +18,11 @@ function WorkHistory({ eventHandler }) {
         <h2>To: </h2>
         <span>{item.workEnd}</span>
         <h2>Responsbilities: </h2>
-        <span>{item.responsbilities}</span>
+        <span>{item.responsibilities}</span>
         <button
           className="delete-history-button"
           onClick={() => {
-            handleDeletion(item.key);
+            handleDelete(item.key);
           }}
         >
           <img className="icon" src={closeIcon} />
@@ -32,23 +31,12 @@ function WorkHistory({ eventHandler }) {
     );
   });
 
-  const handleDeletion = (itemKey) => {
-    setWorkHistoryList(workHistoryList.filter((item) => item.key !== itemKey));
+  const handleDelete = (itemKey) => {
+    deletionHandler(itemKey, 2);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setWorkHistoryList([
-      ...workHistoryList,
-      {
-        key: crypto.randomUUID(),
-        company: e.target[0].value,
-        position: e.target[1].value,
-        workStart: e.target[2].value,
-        workEnd: e.target[3].value,
-        responsbilities: e.target[4].value,
-      },
-    ]);
     setShowWorkHistoryInput(!showWorkHistoryInput);
     eventHandler(e, 2);
   };
@@ -57,7 +45,7 @@ function WorkHistory({ eventHandler }) {
     return (
       <div className="work-history-container">
         <h1>Work History: </h1>
-        <div className="work-history">{workHistory}</div>
+        <div className="work-history">{workHistoryElements}</div>
         <form className="work-history-input-form" onSubmit={handleSubmit}>
           <label htmlFor="input-company">Company: </label>
           <input id="input-company" type="text" />
@@ -68,7 +56,7 @@ function WorkHistory({ eventHandler }) {
           <label htmlFor="input-date-end">To: </label>
           <input id="input-date-end" type="date" />
           <label htmlFor="job-description">
-            Job/Responsibilities Description:{" "}
+            Job/Responsibilities Description:
           </label>
           <textarea id="job-description"></textarea>
           <button type="submit">Submit</button>
@@ -88,7 +76,7 @@ function WorkHistory({ eventHandler }) {
   return (
     <div className="work-history-container">
       <h1>Work History: </h1>
-      <div className="work-history">{workHistory}</div>
+      <div className="work-history">{workHistoryElements}</div>
       <button
         className="add-work-history-button"
         onClick={() => {
