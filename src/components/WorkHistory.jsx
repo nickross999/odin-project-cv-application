@@ -13,7 +13,7 @@ function WorkHistory({
   const [showWorkHistoryInput, setShowWorkHistoryInput] = useState(false);
   const [editWorkHistoryInput, setEditWorkHistoryInput] = useState({
     bool: false,
-    key: null,
+    item: null,
   });
 
   const workHistoryElements = workHistory.map((item) => {
@@ -25,7 +25,7 @@ function WorkHistory({
         <button
           className="edit-work-history-button"
           onClick={() => {
-            setEditWorkHistoryInput({ bool: true, key: item.key });
+            setEditWorkHistoryInput({ bool: true, item: item });
           }}
         >
           <img src={pencilIcon} className="icon" />
@@ -55,40 +55,75 @@ function WorkHistory({
   const handleEdit = (e, itemKey) => {
     e.preventDefault();
     editHandler(e, itemKey, 1);
-    setEditWorkHistoryInput({ bool: false, key: null });
+    setEditWorkHistoryInput({ bool: false, item: null });
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setEditWorkHistoryInput({
+      bool: true,
+      key: editWorkHistoryInput.key,
+      item: { ...editWorkHistoryInput.item, [e.target.name]: e.target.value },
+    });
   };
 
   if (editWorkHistoryInput.bool) {
-    const itemToEdit = workHistory.filter( //doesn't work?
-      (item) => item.key === editWorkHistoryInput.key
-    );
     return (
       <>
         <h1>Work History: </h1>
         <form
           className="work-input-form"
           onSubmit={(e) => {
-            handleEdit(e, editWorkHistoryInput.key);
+            handleEdit(e, editWorkHistoryInput.item.key);
           }}
         >
           <label htmlFor="input-company">Company: </label>
-          <input id="input-company" type="text" value={itemToEdit.company} />
+          <input
+            id="input-company"
+            type="text"
+            name="company"
+            value={editWorkHistoryInput.item.company}
+            onChange={(e) => handleChange(e)}
+          />
           <label htmlFor="input-position">Position: </label>
-          <input id="input-position" type="text" value={itemToEdit.position} />
+          <input
+            id="input-position"
+            type="text"
+            name="position"
+            value={editWorkHistoryInput.item.position}
+            onChange={(e) => handleChange(e)}
+          />
           <label htmlFor="input-date-start">From: </label>
-          <input id="input-date-start" type="date" value={itemToEdit.workStart} />
+          <input
+            id="input-date-start"
+            type="date"
+            name="workStart"
+            value={editWorkHistoryInput.item.workStart}
+            onChange={(e) => handleChange(e)}
+          />
           <label htmlFor="input-date-end">To: </label>
-          <input id="input-date-end" type="date" value={itemToEdit.workEnd} />
+          <input
+            id="input-date-end"
+            type="date"
+            name="workEnd"
+            value={editWorkHistoryInput.item.workEnd}
+            onChange={(e) => handleChange(e)}
+          />
           <label htmlFor="job-description">
             Job/Responsibilities Description:
           </label>
-          <textarea id="job-description" value={itemToEdit.company}></textarea>
+          <textarea
+            id="job-description"
+            name="responsibilities"
+            value={editWorkHistoryInput.item.responsibilities}
+            onChange={(e) => handleChange(e)}
+          ></textarea>
           <button type="submit">Submit</button>
         </form>
         <button
           className="cancel-school-edit-button"
           onClick={() => {
-            setEditWorkHistoryInput({ bool: false, key: null });
+            setEditWorkHistoryInput({ bool: false, item: null });
           }}
         >
           <img className="icon" src={closeIcon} />

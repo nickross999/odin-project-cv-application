@@ -13,7 +13,7 @@ function SchoolHistory({
   const [showSchoolHistoryInput, setSchoolHistoryInput] = useState(false);
   const [editSchoolHistoryInput, setEditSchoolHistoryInput] = useState({
     bool: false,
-    key: null,
+    item: null,
   });
 
   const schoolHistoryElements = schoolHistory.map((item) => {
@@ -25,7 +25,10 @@ function SchoolHistory({
         <button
           className="edit-school-history-button"
           onClick={() => {
-            setEditSchoolHistoryInput({ bool: true, key: item.key });
+            setEditSchoolHistoryInput({
+              bool: true,
+              item: item,
+            });
           }}
         >
           <img src={pencilIcon} className="icon" />
@@ -55,40 +58,65 @@ function SchoolHistory({
   const handleEdit = (e, itemKey) => {
     e.preventDefault();
     editHandler(e, itemKey, 2);
-    setEditSchoolHistoryInput({ bool: false, key: null });
+    setEditSchoolHistoryInput({ bool: false, item: null });
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setEditSchoolHistoryInput({
+      bool: true,
+      item: { ...editSchoolHistoryInput.item, [e.target.name]: e.target.value },
+    });
   };
 
   if (editSchoolHistoryInput.bool) {
-    const itemToEdit = schoolHistory.filter( //doesn't work?
-      (item) => item.key === editSchoolHistoryInput.key
-    );
     return (
       <>
         <h1>School History: </h1>
         <form
           className="school-input-form"
           onSubmit={(e) => {
-            handleEdit(e, editSchoolHistoryInput.key);
+            handleEdit(e, editSchoolHistoryInput.item.key);
           }}
         >
           <label htmlFor="input-school">School: </label>
-          <input id="input-school" type="text" value={itemToEdit.schoolName} />
+          <input
+            id="input-school"
+            type="text"
+            name="schoolName"
+            onChange={(e) => handleChange(e)}
+            value={editSchoolHistoryInput.item.schoolName}
+          />
           <label htmlFor="input-field">Area of Study: </label>
-          <input id="input-field" type="text" value={itemToEdit.field} />
+          <input
+            id="input-field"
+            type="text"
+            name="field"
+            onChange={(e) => handleChange(e)}
+            value={editSchoolHistoryInput.item.field}
+          />
           <label htmlFor="input-date-start">From: </label>
           <input
             id="input-date-start"
             type="date"
-            value={itemToEdit.studyStart}
+            name="studyStart"
+            onChange={(e) => handleChange(e)}
+            value={editSchoolHistoryInput.item.studyStart}
           />
           <label htmlFor="input-date-end">To: </label>
-          <input id="input-date-end" type="date" value={itemToEdit.studyEnd} />
+          <input
+            id="input-date-end"
+            type="date"
+            name="studyEnd"
+            onChange={(e) => handleChange(e)}
+            value={editSchoolHistoryInput.item.studyEnd}
+          />
           <button type="submit">Submit</button>
         </form>
         <button
           className="cancel-school-edit-button"
           onClick={() => {
-            setEditSchoolHistoryInput({ bool: false, key: null });
+            setEditSchoolHistoryInput({ bool: false, item: null });
           }}
         >
           <img className="icon" src={closeIcon} />
